@@ -23,4 +23,9 @@ public class JsonReader {
         JSONObject jsonObject = (JSONObject) obj;
         return jsonObject;
     }
+
+    public static String getTestData(String key) throws IOException, ParseException {
+        String testDataValue;
+        return testDataValue = (String) getJsonData().get(key);
+    }
 }
