@@ -26,7 +26,7 @@ public class AppiumDriverExt {
 
         try{
             driver = new AndroidDriver<>(new URL("http://localhost:4723/wd/hub"), caps) ;
-            driver.manage().timeouts().implicitlyWait(30L, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(20L, TimeUnit.SECONDS);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
