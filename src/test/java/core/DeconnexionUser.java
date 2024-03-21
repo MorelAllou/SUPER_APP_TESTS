@@ -7,14 +7,17 @@ import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 import utils.AppiumDriverExt;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 public class DeconnexionUser {
+@BeforeTest
 
     public static void main(String[] args) throws InterruptedException {
         AppiumDriver<MobileElement> driver = AppiumDriverExt.getAppiumDriver();
+
         //Deconnexion Utilisateur
         MobileElement IconProfil = driver.findElementByXPath("//android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.view.View[1]/android.widget.ImageView[1]");
         Assert.assertEquals(IconProfil.isDisplayed(), true, "L'utilisateur n'est pas connecté à la page d'accueil");

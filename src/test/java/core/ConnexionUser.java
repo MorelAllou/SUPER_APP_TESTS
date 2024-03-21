@@ -5,6 +5,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import models.pages.LoginPage;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 import org.openqa.selenium.OutputType;
@@ -19,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConnexionUser {
-
 
     public static void main(String[] args) throws IOException, ParseException {
         //Launch Application
@@ -47,30 +47,28 @@ public class ConnexionUser {
         Assert.assertTrue(AccessCptButton.isDisplayed(), "Le bouton AccederCompte n'est pas affiché");
         AccessCptButton.click();
         System.out.println("Page d'authentification affichée");
-        //Saisir Numero telephone
+        //Saisir login
         MobileElement PaysIcon = driver.findElementByXPath("//android.view.View[@content-desc=\"\uD83C\uDDE8\uD83C\uDDEE +225\"]");
         Assert.assertTrue(PaysIcon.isDisplayed(), "Le Pays n'est pas la Cote d'Ivoire");
-        MobileElement NumTelTxt = driver.findElementByXPath("//android.widget.EditText[1]");
-        NumTelTxt.click();
-        NumTelTxt.sendKeys(JsonReader.getTestData("login"));
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login().click();
+        loginPage.login().sendKeys(JsonReader.getTestData("login"));
 
         //Saisir Mot de passe
-        MobileElement MdpTxt = driver.findElementByXPath("//android.widget.EditText[2]");
-        MdpTxt.click();
-        MdpTxt.sendKeys(JsonReader.getTestData("mdp"));
+        loginPage.mdp().click();
+        loginPage.mdp().sendKeys(JsonReader.getTestData("mdp"));
         // Envoyer le code de la touche Tabulation
         ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.TAB));
 
         //Vérifier et cliquer le bouton MeConnecter
-        MobileElement ConnectButton = driver.findElementByXPath("//android.widget.Button[@content-desc=\"Me connecter\"]");
-        Assert.assertTrue(ConnectButton.isDisplayed(), "Le bouton Me connecter n'est pas affiché");
+        Assert.assertTrue(loginPage.BtnSeConnecter().isDisplayed(), "Le bouton Me connecter n'est pas affiché");
         // Faire une capture d'écran lorsque l'élément est visible
         File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         // Déplacer la capture d'écran vers un emplacement souhaité
         String screenshotPath = System.getProperty("user.dir") + "EVIDENCE_AFGEBANKCIV/ConnexionUtilisataur/Capture1.png";
         FileUtils.copyFile(screenshotFile, new File(screenshotPath));
 
-        ConnectButton.click();
+        loginPage.BtnSeConnecter().click();
         System.out.println("Authentification effectuée");
 
         /* Check reconnaisance vocale(Don't Allow)*/
@@ -98,10 +96,11 @@ public class ConnexionUser {
         for (int i = 0; i < 4; i++) {
             ZeroButton.click();
         }
+
         System.out.println("Code validé");
         //Vérifiez que l'utilisateur est connecté à la page d'acceuil
-        MobileElement IconProfil = driver.findElementByXPath("//android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.view.View[1]/android.widget.ImageView[1]");
-        Assert.assertTrue(IconProfil.isDisplayed(), "L'utilisateur n'est pas connecté à la page d'accueil");
+        MobileElement Bonjour = driver.findElementByXPath("//android.view.View[@content-desc=\"Bonjour, \"]");
+        Assert.assertTrue(Bonjour.isDisplayed(), "L'utilisateur n'est pas connecté à la page d'accueil");
         System.out.println("Utilisateur connecté");
         // Faire une capture d'écran lorsque l'élément est visible
         screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -110,7 +109,9 @@ public class ConnexionUser {
         FileUtils.copyFile(screenshotFile, new File(screenshotPath));
 
         //Quitter l'application
-        driver.quit();
+        if (null != driver){
+            driver.quit();
+        }
+
     }
 }
-
